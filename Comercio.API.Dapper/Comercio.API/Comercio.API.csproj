@@ -9,10 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Comercio.Data\Comercio.Data.csproj" />
     <ProjectReference Include="..\Comercio.Services\Comercio.Services.csproj" />
   </ItemGroup>
