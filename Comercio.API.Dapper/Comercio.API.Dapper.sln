@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Comercio.API", "Comercio.AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comercio.Data", "Comercio.Data\Comercio.Data.csproj", "{1662F5B8-C9C0-4E4F-88BF-AC20E655F7CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Comercio.Domain", "Comercio.Domain\Comercio.Domain.csproj", "{08E5202A-BDE9-4524-96A9-382962BD152E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1662F5B8-C9C0-4E4F-88BF-AC20E655F7CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1662F5B8-C9C0-4E4F-88BF-AC20E655F7CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1662F5B8-C9C0-4E4F-88BF-AC20E655F7CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08E5202A-BDE9-4524-96A9-382962BD152E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08E5202A-BDE9-4524-96A9-382962BD152E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08E5202A-BDE9-4524-96A9-382962BD152E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08E5202A-BDE9-4524-96A9-382962BD152E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
