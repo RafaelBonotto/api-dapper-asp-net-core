@@ -1,4 +1,8 @@
 using Comercio.Data.ConnectionManager;
+using Comercio.Data.Repository;
+using Comercio.Domain.Interfaces;
+using Comercio.Services.Interfaces;
+using Comercio.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -37,9 +41,11 @@ namespace Comercio.API
             #region Injeção de dependência
 
             // Services:
+            services.AddScoped<IProdutoService, ProdutoService>();
 
             // Repositorys:
             services.AddScoped<IMySqlConnectionManager, MySqlConnectionManager>();
+            services.AddScoped<IProdutoRepository, ProdutoRepository>();
 
             #endregion
         }
