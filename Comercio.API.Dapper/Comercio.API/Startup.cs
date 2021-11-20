@@ -1,3 +1,4 @@
+using Comercio.Data.ConnectionManager;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,15 @@ namespace Comercio.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Comercio.API", Version = "v1" });
             });
+
+            #region Injeção de dependência
+
+            // Services:
+
+            // Repositorys:
+            services.AddScoped<IMySqlConnectionManager, MySqlConnectionManager>();
+
+            #endregion
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
