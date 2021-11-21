@@ -1,9 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿using Comercio.Domain.Entities;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Comercio.Services.Interfaces
 {
     public interface IProdutoService
     {
-        Task<dynamic> ObterProdutos();
+        Task<List<Produto>> ObterProdutos();
+
+        Task<Produto> ObterPorId(int id);
     }
 }
