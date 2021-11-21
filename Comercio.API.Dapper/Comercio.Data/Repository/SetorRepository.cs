@@ -20,7 +20,7 @@ namespace Comercio.Data.Repository
             _config = config;
             _connectionString = _config.GetSection("ConnectionStrings:comercioDB").Value;
         }
-        public async Task<dynamic> ObterSetor()
+        public async Task<List<Setor>> ObterSetor()
         {
             List<Setor> setorBanco;
 
@@ -34,14 +34,14 @@ namespace Comercio.Data.Repository
 
         public async Task<Setor> ObterSetorPorId(int id)
         {
-            Setor setorBanco;
+            Setor setor;
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                setorBanco = connection.QueryFirstOrDefault<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = id });
+                setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = id });
             }
 
-            return setorBanco;
+            return setor;
         }
     }
 }
