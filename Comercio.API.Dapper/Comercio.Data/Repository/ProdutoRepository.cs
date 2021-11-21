@@ -21,16 +21,28 @@ namespace Comercio.Data.Repository
             _connectionString = _config.GetSection("ConnectionStrings:comercioDB").Value;
         }
 
-        public async Task<dynamic> ListarProdutos()
+        public async Task<List<Produto>> ListarProdutos()
         {
             List<Produto> produtos;
 
             using (var connection = new MySqlConnection(_connectionString))
             {
-                produtos = connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
+                produtos =  connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
             }
 
             return produtos;
+        }
+
+        public async Task<Produto> ObterPorId(int id)
+        {
+            Produto produto;
+
+            using (var connection = new MySqlConnection(_connectionString))
+            {
+                produto = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_ID, new { Id = id });
+            }
+
+            return produto;
         }
     }
 }
