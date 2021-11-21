@@ -1,6 +1,7 @@
 ﻿using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Comercio.Services.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Comercio.Services.Services
@@ -14,7 +15,7 @@ namespace Comercio.Services.Services
             _setorRepository = setorRepository;
         }
 
-        public Task<dynamic> ObterSetor()
+        public Task<List<Setor>> ObterSetor()
         {
             try
             {
