@@ -20,5 +20,11 @@ namespace Comercio.API.Controllers
         {
             return Ok(await _produtoService.ObterProdutos());
         }
+
+        [HttpGet("id/{id}")]
+        public async Task<IActionResult> ObterSetorPorId(int id)
+        {
+            return Ok(await _produtoService.ObterPorId(id));
+        }
     }
 }
