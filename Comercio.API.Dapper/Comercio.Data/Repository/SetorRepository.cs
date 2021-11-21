@@ -1,9 +1,8 @@
-﻿using Comercio.Data.Queries;
+﻿using Comercio.Data.ConnectionManager;
+using Comercio.Data.Queries;
 using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Dapper;
-using Microsoft.Extensions.Configuration;
-using MySqlConnector;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,19 +11,18 @@ namespace Comercio.Data.Repository
 {
     public class SetorRepository : ISetorRepository
     {
-        private readonly IConfiguration _config;
-        private string _connectionString;
+        private readonly IMySqlConnectionManager _connection;
 
-        public SetorRepository(IConfiguration config)
+        public SetorRepository(IMySqlConnectionManager connection)
         {
-            _config = config;
-            _connectionString = _config.GetSection("ConnectionStrings:comercioDB").Value;
+            _connection = connection;
         }
+
         public async Task<List<Setor>> ObterSetor()
         {
             List<Setor> setorBanco;
 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection =await _connection.GetConnectionAsync())
             {
                 setorBanco = connection.Query<Setor>(SetorQuery.SELECT_SETOR).ToList();
             }
@@ -36,7 +34,7 @@ namespace Comercio.Data.Repository
         {
             Setor setor;
 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = await _connection.GetConnectionAsync())
             {
                 setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = id });
             }
