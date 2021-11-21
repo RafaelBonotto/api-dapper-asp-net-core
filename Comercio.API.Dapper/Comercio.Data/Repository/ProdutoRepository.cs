@@ -1,9 +1,8 @@
-﻿using Comercio.Data.Queries;
+﻿using Comercio.Data.ConnectionManager;
+using Comercio.Data.Queries;
 using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Dapper;
-using Microsoft.Extensions.Configuration;
-using MySqlConnector;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,20 +11,18 @@ namespace Comercio.Data.Repository
 {
     public class ProdutoRepository : IProdutoRepository
     {
-        private readonly IConfiguration _config;
-        private string _connectionString;
+        private readonly IMySqlConnectionManager _connection;
 
-        public ProdutoRepository(IConfiguration config)
+        public ProdutoRepository(IMySqlConnectionManager connection)
         {
-            _config = config;
-            _connectionString = _config.GetSection("ConnectionStrings:comercioDB").Value;
+            _connection = connection;
         }
 
         public async Task<List<Produto>> ListarProdutos()
         {
             List<Produto> produtos;
 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = await _connection.GetConnectionAsync())
             {
                 produtos =  connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
             }
@@ -37,7 +34,7 @@ namespace Comercio.Data.Repository
         {
             Produto produto;
 
-            using (var connection = new MySqlConnection(_connectionString))
+            using (var connection = await _connection.GetConnectionAsync())
             {
                 produto = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_ID, new { Id = id });
             }
