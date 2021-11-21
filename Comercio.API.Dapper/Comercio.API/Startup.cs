@@ -42,10 +42,12 @@ namespace Comercio.API
 
             // Services:
             services.AddScoped<IProdutoService, ProdutoService>();
+            services.AddScoped<ISetorService, SetorService>();
 
             // Repositorys:
             services.AddScoped<IMySqlConnectionManager, MySqlConnectionManager>();
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<ISetorRepository, SetorRepository>();
 
             #endregion
         }
