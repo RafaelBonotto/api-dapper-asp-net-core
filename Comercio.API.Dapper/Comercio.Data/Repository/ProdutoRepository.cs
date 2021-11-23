@@ -41,5 +41,21 @@ namespace Comercio.Data.Repository
 
             return produto;
         }
+
+        public async Task<Produto> InserirProduto(Produto produto)
+        {            
+            try
+            {
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    var ret = connection.Query<Produto>(new ProdutoQuery().retornaQueryInsertProduto(produto));
+                }
+                return produto;
+            }
+            catch (System.Exception)
+            {
+                return null;
+            }
+        }
     }
 }
