@@ -39,5 +39,17 @@ namespace Comercio.Services.Services
                 throw;
             }
         }
+
+        public async Task<Produto> InserirProduto(Produto produto)
+        {
+            try
+            {
+                return await _repository.InserirProduto(produto);                
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }
