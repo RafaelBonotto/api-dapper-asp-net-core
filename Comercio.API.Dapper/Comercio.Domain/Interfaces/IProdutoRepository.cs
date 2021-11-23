@@ -8,5 +8,6 @@ namespace Comercio.Domain.Interfaces
     {
         Task<List<Produto>> ListarProdutos();
         Task<Produto> ObterPorId(int id);
+        Task<Produto> InserirProduto(Produto produto);
     }
 }
