@@ -46,10 +46,9 @@ namespace Comercio.Data.Repository
         {            
             try
             {
-                var sql = new ProdutoQuery().retornaQueryInsertProduto(produto);
                 using (var connection = await _connection.GetConnectionAsync())
                 {
-                    connection.Query<Produto>(sql);
+                    connection.Query<Produto>(ProdutoQuery.retornaQueryInsertProduto(produto));
                 }
                 return produto;
             }
