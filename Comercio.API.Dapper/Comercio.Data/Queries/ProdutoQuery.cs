@@ -2,13 +2,13 @@
 
 namespace Comercio.Data.Queries
 {
-    public class ProdutoQuery
+    public static class ProdutoQuery
     {
         public const string  SELECT_PRODUTOS = "SELECT * FROM tb_produto WHERE ativo = 1";
 
         public const string  SELECT_PRODUTO_POR_ID = "SELECT * FROM tb_produto WHERE id = @Id";
 
-        public string retornaQueryInsertProduto(Produto produto)
+        public static string retornaQueryInsertProduto(Produto produto)
         {
             return  "INSERT INTO comercioDB.tb_produto " +
                     "(codigo, descricao, preco_custo, preco_venda, data_fabricacao, data_validade, ativo, data_criacao, data_alteracao, setor_id)" +
