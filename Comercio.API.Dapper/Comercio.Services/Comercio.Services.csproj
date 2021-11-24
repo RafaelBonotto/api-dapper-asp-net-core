@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Request\" />
-    <Folder Include="Response\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Comercio.Domain\Comercio.Domain.csproj" />
   </ItemGroup>
 
