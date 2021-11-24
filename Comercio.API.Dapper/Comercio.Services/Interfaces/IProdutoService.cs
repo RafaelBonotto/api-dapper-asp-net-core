@@ -1,4 +1,6 @@
 ﻿using Comercio.Domain.Entities;
+using Comercio.Services.Request;
+using Comercio.Services.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +10,6 @@ namespace Comercio.Services.Interfaces
     {
         Task<List<Produto>> ObterProdutos();
         Task<Produto> ObterPorId(int id);
-        Task<Produto> InserirProduto(Produto produto);
+        Task<ProdutoResponse> InserirProduto(ProdutoRequest produto);
     }
 }
