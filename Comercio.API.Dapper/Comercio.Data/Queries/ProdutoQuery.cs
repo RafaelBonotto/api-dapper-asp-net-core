@@ -8,7 +8,7 @@ namespace Comercio.Data.Queries
 
         public const string  SELECT_PRODUTO_POR_ID = "SELECT * FROM tb_produto WHERE id = @Id";
 
-        public static string retornaQueryInsertProduto(Produto produto)
+        public static string RetornaQueryInsertProduto(Produto produto)
         {
             return  "INSERT INTO comercioDB.tb_produto " +
                     "(codigo, descricao, preco_custo, preco_venda, data_fabricacao, data_validade, ativo, data_criacao, data_alteracao, setor_id)" +
