@@ -6,6 +6,12 @@ namespace Comercio.Domain.Entities
 {
     public class Produto
     {
+        public Produto()
+        {
+            Tb_FornecedorProduto = new List<FornecedorProduto>();
+            Tb_Setor = new Setor();
+        }
+
         public long Id { get; set; }
 
         [Required(ErrorMessage ="Código obrigatório")]
@@ -13,7 +19,6 @@ namespace Comercio.Domain.Entities
 
         [Required(ErrorMessage = "Descrição obrigatório")]
         public string Descricao { get; set; }
-        public string Setor { get; set; }
 
         [Required(ErrorMessage ="Preço de custo obrigatório")]
         public decimal Preco_custo { get; set; }
