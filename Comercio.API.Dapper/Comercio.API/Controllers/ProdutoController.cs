@@ -1,5 +1,6 @@
 ﻿using Comercio.Domain.Entities;
 using Comercio.Services.Interfaces;
+using Comercio.Services.Request;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -29,9 +30,9 @@ namespace Comercio.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> InserirProduto(Produto produto)
+        public async Task<IActionResult> InserirProduto(ProdutoRequest produto)
         {
-            return Ok(_produtoService.InserirProduto(produto));
+            return Ok(await _produtoService.InserirProduto(produto));
         }
     }
 }
