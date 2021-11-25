@@ -4,6 +4,7 @@ using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Dapper;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -21,25 +22,54 @@ namespace Comercio.Data.Repository
         public async Task<List<Setor>> ObterSetor()
         {
             List<Setor> setorBanco;
-
-            using (var connection =await _connection.GetConnectionAsync())
+            try
             {
-                setorBanco = connection.Query<Setor>(SetorQuery.SELECT_SETOR).ToList();
-            }
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    setorBanco = connection.Query<Setor>(SetorQuery.SELECT_SETOR).ToList();
+                }
 
-            return setorBanco;
+                return setorBanco;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
+           
+        }
+
+        public async Task<Setor> InserirSetor(Setor setor)
+        {
+            try
+            {
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    await connection.QueryAsync<Produto>(SetorQuery.RetornaQueryInsertSetor(setor));
+                }
+                return setor;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }           
         }
 
         public async Task<Setor> ObterSetorPorId(int id)
         {
             Setor setor;
-
-            using (var connection = await _connection.GetConnectionAsync())
+            try
             {
-                setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = id });
-            }
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = id });
+                }
 
-            return setor;
+                return setor;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }            
         }
     }
 }
