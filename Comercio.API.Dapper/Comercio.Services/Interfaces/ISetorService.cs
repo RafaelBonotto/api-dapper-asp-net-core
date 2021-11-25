@@ -1,4 +1,6 @@
 ﻿using Comercio.Domain.Entities;
+using Comercio.Services.Request;
+using Comercio.Services.Response;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,5 +10,6 @@ namespace Comercio.Services.Interfaces
     {
         Task<List<Setor>> ObterSetor();
         Task<Setor> ObterSetorPorId(int id);
+        Task<SetorResponse> InserirSetor(SetorRequest setor);
     }
 }
