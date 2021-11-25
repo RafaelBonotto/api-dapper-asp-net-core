@@ -1,4 +1,5 @@
 ﻿using Comercio.Services.Interfaces;
+using Comercio.Services.Request;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -25,6 +26,12 @@ namespace Comercio.API.Controllers
         public async Task<IActionResult> ObterSetorPorId(int id)
         {
             return Ok(await _setorService.ObterSetorPorId(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> InserirSetor(SetorRequest setor)
+        {
+            return Ok(await _setorService.InserirSetor(setor));
         }
     }
 }
