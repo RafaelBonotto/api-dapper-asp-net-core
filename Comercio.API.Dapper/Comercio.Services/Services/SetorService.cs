@@ -24,8 +24,7 @@ namespace Comercio.Services.Services
             try
             {
                 var novoSetor = new Setor(){ Descricao = setor.Descricao };
-
-                await _setorRepository.InserirSetor(novoSetor);
+                novoSetor = await _setorRepository.InserirSetor(novoSetor);
                 ret.Setor = novoSetor;
                 ret.Sucesso = true;
                 ret.Mensagem = "Setor inserido com sucesso";
@@ -51,7 +50,7 @@ namespace Comercio.Services.Services
             }
         }
 
-        public Task<Setor> ObterSetorPorId(int id)
+        public Task<Setor> ObterSetorPorId(long id)
         {
             try
             {
