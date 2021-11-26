@@ -23,7 +23,7 @@ namespace Comercio.API.Controllers
         }
 
         [HttpGet("id/{id}")]
-        public async Task<IActionResult> ObterSetorPorId(int id)
+        public async Task<IActionResult> ObterSetorPorId(long id)
         {
             return Ok(await _setorService.ObterSetorPorId(id));
         }
