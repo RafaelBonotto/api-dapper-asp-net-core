@@ -7,7 +7,7 @@ namespace Comercio.Domain.Interfaces
     public interface ISetorRepository
     {
         Task<List<Setor>> ObterSetor();
-        Task<Setor> ObterSetorPorId(int id);
+        Task<Setor> ObterSetorPorId(long id);
         Task<Setor> InserirSetor(Setor setor);
     }
 }
