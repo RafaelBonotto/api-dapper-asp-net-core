@@ -9,7 +9,7 @@ namespace Comercio.Services.Interfaces
     public interface ISetorService
     {
         Task<List<Setor>> ObterSetor();
-        Task<Setor> ObterSetorPorId(int id);
+        Task<Setor> ObterSetorPorId(long id);
         Task<SetorResponse> InserirSetor(SetorRequest setor);
     }
 }
