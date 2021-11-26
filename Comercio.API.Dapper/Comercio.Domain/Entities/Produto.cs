@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Comercio.Domain.Entities
 {
@@ -33,6 +34,8 @@ namespace Comercio.Domain.Entities
         public long Setor_id { get; set; }
 
         public virtual ICollection<FornecedorProduto> Tb_FornecedorProduto { get; set; }
+
+        [JsonPropertyName("Setor")]
         public virtual Setor Tb_Setor { get; set; }
 
     }
