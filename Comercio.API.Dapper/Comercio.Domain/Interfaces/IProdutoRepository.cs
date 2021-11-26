@@ -7,7 +7,7 @@ namespace Comercio.Domain.Interfaces
     public interface IProdutoRepository
     {
         Task<List<Produto>> ListarProdutos();
-        Task<Produto> ObterPorId(int id);
+        Task<Produto> ObterPorId(long id);
         Task<Produto> InserirProduto(Produto produto);
     }
 }
