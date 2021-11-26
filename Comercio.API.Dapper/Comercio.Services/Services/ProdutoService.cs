@@ -30,7 +30,7 @@ namespace Comercio.Services.Services
             }
         }
 
-        public async Task<Produto> ObterPorId(int id)
+        public async Task<Produto> ObterPorId(long id)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Comercio.Services.Services
                     Preco_venda = produto.Preco_venda,
                     Setor_id = produto.Setor_id
                 };
-                await _repository.InserirProduto(novoProduto);
+                novoProduto = await _repository.InserirProduto(novoProduto);
                 ret.Produto = novoProduto;
                 ret.Sucesso = true;
                 ret.Mensagem = "Produto inserido com sucesso";
