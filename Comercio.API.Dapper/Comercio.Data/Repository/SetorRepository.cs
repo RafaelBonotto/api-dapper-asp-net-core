@@ -44,9 +44,9 @@ namespace Comercio.Data.Repository
             {
                 using (var connection = await _connection.GetConnectionAsync())
                 {
-                    await connection.QueryAsync<Produto>(SetorQuery.RetornaQueryInsertSetor(setor));
-                }
-                return setor;
+                    var setorId = await connection.ExecuteScalarAsync<long>(SetorQuery.RetornaQueryInsertSetor(setor));
+                    return await this.ObterSetorPorId(setorId);
+                }                
             }
             catch (System.Exception)
             {
@@ -54,7 +54,7 @@ namespace Comercio.Data.Repository
             }           
         }
 
-        public async Task<Setor> ObterSetorPorId(int id)
+        public async Task<Setor> ObterSetorPorId(long id)
         {
             Setor setor;
             try
