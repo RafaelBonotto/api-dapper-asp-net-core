@@ -24,7 +24,7 @@ namespace Comercio.API.Controllers
         }
 
         [HttpGet("id/{id}")]
-        public async Task<IActionResult> ObterProdutoPorId(int id)
+        public async Task<IActionResult> ObterProdutoPorId(long id)
         {
             return Ok(await _produtoService.ObterPorId(id));
         }
