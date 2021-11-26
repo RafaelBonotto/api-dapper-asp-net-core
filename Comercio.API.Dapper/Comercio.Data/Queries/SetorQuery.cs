@@ -12,8 +12,12 @@ namespace Comercio.Data.Queries
 
         public static string RetornaQueryInsertSetor(Setor setor)
         {
-            return "INSERT INTO comercioDB.tb_setor(descricao, ativo, data_criacao, data_alteracao) " +
-                   $"VALUES('{setor.Descricao}', 1, now(), now())";
+            var query= "START TRANSACTION;" +
+                        "INSERT INTO comercioDB.tb_setor(descricao, ativo, data_criacao, data_alteracao)" +
+                        $"VALUES('{setor.Descricao}', 1, now(), now());" +
+                        "SELECT LAST_INSERT_ID();" +
+                        "COMMIT;";
+            return query;
         }
     }
 }
