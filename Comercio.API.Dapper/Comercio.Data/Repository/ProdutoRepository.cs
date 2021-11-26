@@ -21,24 +21,31 @@ namespace Comercio.Data.Repository
         public async Task<List<Produto>> ListarProdutos()
         {
             List<Produto> produtos;
-
-            using (var connection = await _connection.GetConnectionAsync())
+            try
             {
-                produtos =  connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
-            }
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    produtos = connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
+                }
 
-            return produtos;
+                return produtos;
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
         }
 
-        public async Task<Produto> ObterPorId(int id)
+        public async Task<Produto> ObterPorId(long id)
         {
             Produto produto;
 
             using (var connection = await _connection.GetConnectionAsync())
             {
                 produto = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_ID, new { Id = id });
+                produto.Tb_Setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = produto.Setor_id });
             }
-
             return produto;
         }
 
@@ -48,11 +55,11 @@ namespace Comercio.Data.Repository
             {
                 using (var connection = await _connection.GetConnectionAsync())
                 {
-                    connection.Query<Produto>(ProdutoQuery.RetornaQueryInsertProduto(produto));
+                    var produtoId = await connection.ExecuteScalarAsync<long>(ProdutoQuery.RetornaQueryInsertProduto(produto));
+                    return await this.ObterPorId(produtoId);
                 }
-                return produto;
             }
-            catch (System.Exception)
+            catch (System.Exception e)
             {
                 return null;
             }
