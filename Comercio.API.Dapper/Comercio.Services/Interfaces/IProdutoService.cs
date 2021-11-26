@@ -9,7 +9,7 @@ namespace Comercio.Services.Interfaces
     public interface IProdutoService
     {
         Task<List<Produto>> ObterProdutos();
-        Task<Produto> ObterPorId(int id);
+        Task<Produto> ObterPorId(long id);
         Task<ProdutoResponse> InserirProduto(ProdutoRequest produto);
     }
 }
