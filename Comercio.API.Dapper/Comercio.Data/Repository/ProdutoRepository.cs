@@ -64,5 +64,21 @@ namespace Comercio.Data.Repository
                 return null;
             }
         }
+
+        public async Task<Produto> AtualizarProduto(Produto produto)
+        {
+            try
+            {
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    await connection.QueryAsync(ProdutoQuery.RetornaQueryUpdateProduto(produto));
+                    return await this.ObterPorId(produto.Id);
+                }
+            }
+            catch (System.Exception e)
+            {
+                return null;
+            }
+        }
     }
 }
