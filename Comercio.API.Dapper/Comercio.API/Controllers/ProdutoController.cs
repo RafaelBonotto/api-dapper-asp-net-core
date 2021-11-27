@@ -34,5 +34,11 @@ namespace Comercio.API.Controllers
         {
             return Ok(await _produtoService.InserirProduto(produto));
         }
+
+        [HttpPost("atualizar/{produtoId}")]
+        public async Task<IActionResult> AtualizarProduto(long produtoId, ProdutoRequest produto)
+        {
+            return Ok(await _produtoService.AtualizarProduto(produtoId, produto));
+        }
     }
 }
