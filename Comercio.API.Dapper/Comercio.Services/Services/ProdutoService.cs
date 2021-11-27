@@ -68,5 +68,33 @@ namespace Comercio.Services.Services
                 return ret;
             }
         }
+
+        public async Task<ProdutoResponse> AtualizarProduto(long produtoId, ProdutoRequest produto)
+        {
+            var ret = new ProdutoResponse();
+            try
+            {
+                var produtoAtualizado = new Produto()
+                {
+                    Id = produtoId,
+                    Codigo = produto.Codigo,
+                    Descricao = produto.Descricao,
+                    Preco_custo = produto.Preco_custo,
+                    Preco_venda = produto.Preco_venda,
+                    Setor_id = produto.Setor_id
+                };
+                produtoAtualizado = await _repository.AtualizarProduto(produtoAtualizado);
+                ret.Produto = produtoAtualizado;
+                ret.Sucesso = true;
+                ret.Mensagem = "Produto atualizado com sucesso";
+                return ret;
+            }
+            catch (Exception error)
+            {
+                ret.Sucesso = false;
+                ret.Mensagem = error.Message;
+                return ret;
+            }
+        }
     }
 }
