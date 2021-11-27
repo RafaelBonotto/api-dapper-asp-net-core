@@ -18,5 +18,21 @@ namespace Comercio.Data.Queries
                         "COMMIT;";
             return query;
         }
+
+        public static string RetornaQueryUpdateProduto(Produto produto)
+        {
+            var query = "START TRANSACTION;" +
+                        $"UPDATE comercioDB.tb_produto SET " +
+                        $"codigo = '{ produto.Codigo}' , " +
+                        $"descricao = '{produto.Descricao}' , " +
+                        $"preco_custo = {produto.Preco_custo} , " +
+                        $"preco_venda = {produto.Preco_venda} , " +
+                        $"setor_id = {produto.Setor_id} , " +
+                        "ativo = 1 , " +
+                        "data_alteracao = now() " +
+                        $"WHERE id = {produto.Id};" +
+                        "COMMIT;";
+            return query;
+        }
     }
 }
