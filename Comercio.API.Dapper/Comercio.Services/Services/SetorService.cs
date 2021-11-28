@@ -61,5 +61,53 @@ namespace Comercio.Services.Services
                 throw;
             }
         }
+        
+        public async Task<SetorResponse> AtualizarSetor(long setorId, SetorRequest setor)
+        {
+            var ret = new SetorResponse();
+            try
+            {
+                var setorAtualizado = new Setor() { Descricao = setor.Descricao };
+                setorAtualizado = await _setorRepository.AtualizarSetor(setorAtualizado);
+                ret.Setor = setorAtualizado;
+                ret.Sucesso = true;
+                ret.Mensagem = "Setor atualizado com sucesso";
+                return ret;
+            }
+            catch (Exception error)
+            {
+                ret.Sucesso = false;
+                ret.Mensagem = error.Message;
+                return ret;
+            }
+        }
+
+        public async Task<SetorResponse> ExcluirSetor(long setorId)
+        {
+            var ret = new SetorResponse();
+            try
+            {
+                if (await _setorRepository.ExcluirSetor(setorId))
+                {
+                    ret.Setor = null;
+                    ret.Sucesso = true;
+                    ret.Mensagem = "Setor excluído com sucesso";
+                }
+                else
+                {
+                    ret.Setor = null;
+                    ret.Sucesso = false;
+                    ret.Mensagem = "Não foi possível excluir o setor";
+                }
+                return ret;
+            }
+            catch (Exception erro)
+            {
+                ret.Setor = null;
+                ret.Sucesso = false;
+                ret.Mensagem = erro.Message;
+                return ret;
+            }
+        }
     }
 }
