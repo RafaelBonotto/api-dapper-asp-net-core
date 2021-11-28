@@ -9,5 +9,7 @@ namespace Comercio.Domain.Interfaces
         Task<List<Setor>> ObterSetor();
         Task<Setor> ObterSetorPorId(long id);
         Task<Setor> InserirSetor(Setor setor);
+        Task<Setor> AtualizarSetor(Setor setor);
+        Task<bool> ExcluirSetor(long setorId);
     }
 }
