@@ -3,6 +3,7 @@ using Comercio.Data.Queries;
 using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,13 +27,15 @@ namespace Comercio.Data.Repository
                 using (var connection = await _connection.GetConnectionAsync())
                 {
                     produtos = connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
+                    foreach (var produto in produtos)
+                    {
+                        produto.Tb_Setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = produto.Setor_id });
+                    }
                 }
-
                 return produtos;
             }
             catch (System.Exception)
             {
-
                 throw;
             }
         }
@@ -55,6 +58,10 @@ namespace Comercio.Data.Repository
             {
                 using (var connection = await _connection.GetConnectionAsync())
                 {
+                    var checkCodigo = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_CODIGO, new { Codigo = produto.Codigo });
+                    if(checkCodigo != null)
+                        throw new Exception("Não foi possível inserir o produto com esse código");
+
                     var produtoId = await connection.ExecuteScalarAsync<long>(ProdutoQuery.RetornaQueryInsertProduto(produto));
                     return await this.ObterPorId(produtoId);
                 }
@@ -78,6 +85,21 @@ namespace Comercio.Data.Repository
             catch (System.Exception e)
             {
                 return null;
+            }
+        }
+
+        public async Task<bool> ExcluirProduto(long produtoId)
+        {
+            try
+            {
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    return await connection.QueryAsync<Setor>(ProdutoQuery.DELETE_PRODUTO, new { Id = produtoId }) != null;
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
             }
         }
     }
