@@ -10,5 +10,6 @@ namespace Comercio.Domain.Interfaces
         Task<Produto> ObterPorId(long id);
         Task<Produto> InserirProduto(Produto produto);
         Task<Produto> AtualizarProduto(Produto produto);
+        Task<bool> ExcluirProduto(long produtoId);
     }
 }
