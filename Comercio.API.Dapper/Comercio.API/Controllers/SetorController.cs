@@ -33,5 +33,17 @@ namespace Comercio.API.Controllers
         {
             return Ok(await _setorService.InserirSetor(setor));
         }
+
+        [HttpPost("atualizar/{setorId}")]
+        public async Task<IActionResult> AtualizarSetor(long setorId, SetorRequest setor)
+        {
+            return Ok(await _setorService.AtualizarSetor(setorId, setor));
+        }
+
+        [HttpPost("excluir/{setorId}")]
+        public async Task<IActionResult> ExcluirSetor(long setorId)
+        {
+            return Ok(await _setorService.ExcluirSetor(setorId));
+        }
     }
 }
