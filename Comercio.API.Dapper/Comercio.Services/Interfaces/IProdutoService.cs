@@ -12,5 +12,6 @@ namespace Comercio.Services.Interfaces
         Task<Produto> ObterPorId(long id);
         Task<ProdutoResponse> InserirProduto(ProdutoRequest produto);
         Task<ProdutoResponse> AtualizarProduto(long produtoId, ProdutoRequest produto);
+        Task<ProdutoResponse> ExcluirProduto(long produtoId);
     }
 }
