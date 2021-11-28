@@ -11,5 +11,7 @@ namespace Comercio.Services.Interfaces
         Task<List<Setor>> ObterSetor();
         Task<Setor> ObterSetorPorId(long id);
         Task<SetorResponse> InserirSetor(SetorRequest setor);
+        Task<SetorResponse> ExcluirSetor(long setorId);
+        Task<SetorResponse> AtualizarSetor(long setorId, SetorRequest setor);
     }
 }
