@@ -96,5 +96,33 @@ namespace Comercio.Services.Services
                 return ret;
             }
         }
+
+        public async Task<ProdutoResponse> ExcluirProduto(long produtoId)
+        {
+            var ret = new ProdutoResponse();
+            try
+            {
+                if(await _repository.ExcluirProduto(produtoId))
+                {
+                    ret.Produto = null;
+                    ret.Sucesso = true;
+                    ret.Mensagem = "Produto excluído com sucesso";
+                }
+                else
+                {
+                    ret.Produto = null;
+                    ret.Sucesso = false;
+                    ret.Mensagem = "Não foi possível excluir o produto";
+                }
+                return ret;
+            }
+            catch (Exception erro)
+            {
+                ret.Produto = null;
+                ret.Sucesso = false;
+                ret.Mensagem = erro.Message;
+                return ret;
+            }
+        }
     }
 }
