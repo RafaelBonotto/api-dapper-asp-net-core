@@ -3,6 +3,7 @@ using Comercio.Data.Queries;
 using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Dapper;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -44,6 +45,10 @@ namespace Comercio.Data.Repository
             {
                 using (var connection = await _connection.GetConnectionAsync())
                 {
+                    var checkDescricao = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_DESCRICAO, new { Descricao = setor.Descricao });
+                    if (checkDescricao != null)
+                        throw new Exception("Não foi possível inserir o setor com essa descrição");
+
                     var setorId = await connection.ExecuteScalarAsync<long>(SetorQuery.RetornaQueryInsertSetor(setor));
                     return await this.ObterSetorPorId(setorId);
                 }                
@@ -52,6 +57,26 @@ namespace Comercio.Data.Repository
             {
                 throw;
             }           
+        }
+
+        public async Task<Setor> AtualizarSetor(Setor setor)
+        {
+            try
+            {
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    var checkDescricao = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_DESCRICAO, new { Descricao = setor.Descricao });
+                    if (checkDescricao != null)
+                        throw new Exception("Não foi possível atualizar o setor com essa descrição");
+
+                    var setorId = await connection.ExecuteScalarAsync<long>(SetorQuery.RetornaQueryUpdateSetor(setor));
+                    return await this.ObterSetorPorId(setorId);
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         public async Task<Setor> ObterSetorPorId(long id)
@@ -70,6 +95,21 @@ namespace Comercio.Data.Repository
             {
                 throw;
             }            
+        }
+
+        public async Task<bool> ExcluirSetor(long setorId)
+        {
+            try
+            {
+                using (var connection = await _connection.GetConnectionAsync())
+                {
+                    return await connection.QueryAsync<Setor>(SetorQuery.DELETE_SETOR, new { Id = setorId }) != null;
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }
