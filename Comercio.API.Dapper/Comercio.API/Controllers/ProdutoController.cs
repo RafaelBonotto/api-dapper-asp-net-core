@@ -40,5 +40,11 @@ namespace Comercio.API.Controllers
         {
             return Ok(await _produtoService.AtualizarProduto(produtoId, produto));
         }
+
+        [HttpPost("excluir/{produtoId}")]
+        public async Task<IActionResult> ExcluirProduto(long produtoId)
+        {
+            return Ok(await _produtoService.ExcluirProduto(produtoId));
+        }
     }
 }
