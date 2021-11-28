@@ -8,6 +8,10 @@ namespace Comercio.Data.Queries
 
         public const string  SELECT_PRODUTO_POR_ID = "SELECT * FROM comercioDB.tb_produto WHERE id = @Id";
 
+        public const string  SELECT_PRODUTO_POR_CODIGO = "SELECT * FROM comercioDB.tb_produto WHERE codigo = @Codigo";
+
+        public const string  DELETE_PRODUTO = "UPDATE comercioDB.tb_produto SET ativo = 0 WHERE id = @Id;";
+
         public static string RetornaQueryInsertProduto(Produto produto)
         {
             var query = "START TRANSACTION;" +
@@ -21,8 +25,7 @@ namespace Comercio.Data.Queries
 
         public static string RetornaQueryUpdateProduto(Produto produto)
         {
-            var query = "START TRANSACTION;" +
-                        $"UPDATE comercioDB.tb_produto SET " +
+            var query = $"UPDATE comercioDB.tb_produto SET " +
                         $"codigo = '{ produto.Codigo}' , " +
                         $"descricao = '{produto.Descricao}' , " +
                         $"preco_custo = {produto.Preco_custo} , " +
@@ -30,8 +33,7 @@ namespace Comercio.Data.Queries
                         $"setor_id = {produto.Setor_id} , " +
                         "ativo = 1 , " +
                         "data_alteracao = now() " +
-                        $"WHERE id = {produto.Id};" +
-                        "COMMIT;";
+                        $"WHERE id = {produto.Id};";
             return query;
         }
     }
