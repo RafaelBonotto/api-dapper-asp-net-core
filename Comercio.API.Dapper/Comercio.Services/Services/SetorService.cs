@@ -4,7 +4,6 @@ using Comercio.Services.Interfaces;
 using Comercio.Services.Request;
 using Comercio.Services.Response;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Comercio.Services.Services
@@ -38,27 +37,39 @@ namespace Comercio.Services.Services
             }
         }
 
-        public Task<List<Setor>> ObterSetor()
+        public async Task<ListaSetorResponse> ObterSetor()
         {
+            var ret = new ListaSetorResponse();
             try
             {
-                return _setorRepository.ObterSetor();
+                ret.Setores = await _setorRepository.ObterSetor();
+                ret.Sucesso = true;
+                ret.Mensagem = "Sucesso";
+                return ret;
             }
-            catch (System.Exception)
+            catch (Exception erro)
             {
-                throw;
+                ret.Sucesso = false;
+                ret.Mensagem = erro.Message;
+                return ret;
             }
         }
 
-        public Task<Setor> ObterSetorPorId(long id)
+        public async Task<SetorResponse> ObterSetorPorId(long id)
         {
+            var ret = new SetorResponse();
             try
             {
-                return _setorRepository.ObterSetorPorId(id);
+                ret.Setor = await _setorRepository.ObterSetorPorId(id);
+                ret.Sucesso = true;
+                ret.Mensagem = "Sucesso";
+                return ret;
             }
-            catch (System.Exception)
+            catch (Exception erro)
             {
-                throw;
+                ret.Sucesso = false;
+                ret.Mensagem = erro.Message;
+                return ret;
             }
         }
         
