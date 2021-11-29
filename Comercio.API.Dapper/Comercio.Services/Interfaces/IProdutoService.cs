@@ -8,8 +8,8 @@ namespace Comercio.Services.Interfaces
 {
     public interface IProdutoService
     {
-        Task<List<Produto>> ObterProdutos();
-        Task<Produto> ObterPorId(long id);
+        Task<ListaProdutoResponse> ObterProdutos();
+        Task<ProdutoResponse> ObterPorId(long id);
         Task<ProdutoResponse> InserirProduto(ProdutoRequest produto);
         Task<ProdutoResponse> AtualizarProduto(long produtoId, ProdutoRequest produto);
         Task<ProdutoResponse> ExcluirProduto(long produtoId);
