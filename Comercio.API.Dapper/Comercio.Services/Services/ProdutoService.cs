@@ -4,7 +4,6 @@ using Comercio.Services.Interfaces;
 using Comercio.Services.Request;
 using Comercio.Services.Response;
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Comercio.Services.Services
@@ -18,27 +17,39 @@ namespace Comercio.Services.Services
             _repository = repository;
         }
 
-        public async Task<List<Produto>> ObterProdutos()
+        public async Task<ListaProdutoResponse> ObterProdutos()
         {
+            var ret = new ListaProdutoResponse();
             try
             {
-                return await _repository.ListarProdutos();
+                ret.Produtos = await _repository.ListarProdutos();
+                ret.Sucesso = true;
+                ret.Mensagem = "Sucesso";
+                return ret;
             }
-            catch (Exception)
+            catch (Exception erro)
             {
-                throw;
+                ret.Sucesso = false;
+                ret.Mensagem = erro.Message;
+                return ret;
             }
         }
 
-        public async Task<Produto> ObterPorId(long id)
+        public async Task<ProdutoResponse> ObterPorId(long id)
         {
+            var ret = new ProdutoResponse();
             try
             {
-                return await _repository.ObterPorId(id);
+                ret.Produto = await _repository.ObterPorId(id);
+                ret.Sucesso = true;
+                ret.Mensagem = "Sucesso";
+                return ret;
             }
-            catch (Exception)
+            catch (Exception erro)
             {
-                throw;
+                ret.Sucesso = false;
+                ret.Mensagem = erro.Message;
+                return ret;
             }
         }
 
@@ -61,10 +72,10 @@ namespace Comercio.Services.Services
                 ret.Mensagem = "Produto inserido com sucesso";
                 return ret;
             }
-            catch (Exception error)
+            catch (Exception erro)
             {
                 ret.Sucesso = false;
-                ret.Mensagem = error.Message;
+                ret.Mensagem = erro.Message;
                 return ret;
             }
         }
@@ -89,10 +100,10 @@ namespace Comercio.Services.Services
                 ret.Mensagem = "Produto atualizado com sucesso";
                 return ret;
             }
-            catch (Exception error)
+            catch (Exception erro)
             {
                 ret.Sucesso = false;
-                ret.Mensagem = error.Message;
+                ret.Mensagem = erro.Message;
                 return ret;
             }
         }
