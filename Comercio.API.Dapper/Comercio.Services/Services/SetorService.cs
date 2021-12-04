@@ -1,9 +1,10 @@
-﻿using Comercio.Domain.Entities;
+﻿using Comercio.Domain.Base;
+using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Comercio.Services.Interfaces;
 using Comercio.Services.Request;
-using Comercio.Services.Response;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Comercio.Services.Services
@@ -17,107 +18,70 @@ namespace Comercio.Services.Services
             _setorRepository = setorRepository;
         }
 
-        public async Task<SetorResponse> InserirSetor(SetorRequest setor)
+        public async Task<ResponseBase<Setor>> InserirSetor(SetorRequest setor)
         {
-            var ret = new SetorResponse();
             try
             {
-                var novoSetor = new Setor(){ Descricao = setor.Descricao };
+                var novoSetor = new Setor() { Descricao = setor.Descricao };
                 novoSetor = await _setorRepository.InserirSetor(novoSetor);
-                ret.Setor = novoSetor;
-                ret.Sucesso = true;
-                ret.Mensagem = "Setor inserido com sucesso";
-                return ret;
-            }
-            catch (Exception error)
-            {
-                ret.Sucesso = false;
-                ret.Mensagem = error.Message;
-                return ret;
-            }
-        }
-
-        public async Task<ListaSetorResponse> ObterSetor()
-        {
-            var ret = new ListaSetorResponse();
-            try
-            {
-                ret.Setores = await _setorRepository.ObterSetor();
-                ret.Sucesso = true;
-                ret.Mensagem = "Sucesso";
-                return ret;
+                return new ResponseBase<Setor>(novoSetor);
             }
             catch (Exception erro)
             {
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<Setor>(erro.Message);
             }
         }
 
-        public async Task<SetorResponse> ObterSetorPorId(long id)
-        {
-            var ret = new SetorResponse();
+        public async Task<ResponseBase<List<Setor>>> ObterSetor()
+        {            
             try
             {
-                ret.Setor = await _setorRepository.ObterSetorPorId(id);
-                ret.Sucesso = true;
-                ret.Mensagem = "Sucesso";
-                return ret;
+                var setor = await _setorRepository.ObterSetor();
+                return new ResponseBase<List<Setor>>(setor);                
             }
             catch (Exception erro)
             {
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<List<Setor>>(erro.Message);
             }
         }
-        
-        public async Task<SetorResponse> AtualizarSetor(long setorId, SetorRequest setor)
+
+        public async Task<ResponseBase<Setor>> ObterSetorPorId(long id)
         {
-            var ret = new SetorResponse();
             try
             {
-                var setorAtualizado = new Setor() { Descricao = setor.Descricao };
+                var setor = await _setorRepository.ObterSetorPorId(id);
+                return new ResponseBase<Setor>(setor);                
+            }
+            catch (Exception erro)
+            {
+                return new ResponseBase<Setor>(erro.Message);
+            }
+        }
+
+        public async Task<ResponseBase<Setor>> AtualizarSetor(long setorId, SetorRequest setor)
+        {            
+            try
+            {
+                var setorAtualizado = new Setor() { Id = setorId, Descricao = setor.Descricao };
                 setorAtualizado = await _setorRepository.AtualizarSetor(setorAtualizado);
-                ret.Setor = setorAtualizado;
-                ret.Sucesso = true;
-                ret.Mensagem = "Setor atualizado com sucesso";
-                return ret;
-            }
-            catch (Exception error)
-            {
-                ret.Sucesso = false;
-                ret.Mensagem = error.Message;
-                return ret;
-            }
-        }
-
-        public async Task<SetorResponse> ExcluirSetor(long setorId)
-        {
-            var ret = new SetorResponse();
-            try
-            {
-                if (await _setorRepository.ExcluirSetor(setorId))
-                {
-                    ret.Setor = null;
-                    ret.Sucesso = true;
-                    ret.Mensagem = "Setor excluído com sucesso";
-                }
-                else
-                {
-                    ret.Setor = null;
-                    ret.Sucesso = false;
-                    ret.Mensagem = "Não foi possível excluir o setor";
-                }
-                return ret;
+                return new ResponseBase<Setor>(setorAtualizado);               
             }
             catch (Exception erro)
             {
-                ret.Setor = null;
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<Setor>(erro.Message);
+            }
+        }
+
+        public async Task<ResponseBase<bool>> ExcluirSetor(long setorId)
+        {
+            try
+            {
+                var sucesso = await _setorRepository.ExcluirSetor(setorId);
+                return new ResponseBase<bool>(sucesso);
+            }
+            catch (Exception erro)
+            {
+                return new ResponseBase<bool>(erro.Message);
             }
         }
     }
