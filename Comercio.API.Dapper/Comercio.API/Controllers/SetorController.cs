@@ -1,4 +1,7 @@
-﻿using Comercio.Services.Interfaces;
+﻿using Comercio.Domain.Base;
+using Comercio.Domain.Entities;
+using Comercio.Domain.Extensions;
+using Comercio.Services.Interfaces;
 using Comercio.Services.Request;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -16,34 +19,65 @@ namespace Comercio.API.Controllers
             _setorService = setorService;
         }
 
-        [HttpGet("listar")]
-        public async Task<IActionResult> ObterSetor()
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
         {
-            return Ok(await _setorService.ObterSetor());
+            var setor = await _setorService.ObterSetor();
+
+            if (setor.Errors.Count > 0)
+                return StatusCode(500, setor);
+
+            return Ok(setor);
         }
 
-        [HttpGet("id/{id}")]
-        public async Task<IActionResult> ObterSetorPorId(long id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] long id)
         {
-            return Ok(await _setorService.ObterSetorPorId(id));
+            var setor = await _setorService.ObterSetorPorId(id);
+
+            if (setor.Errors.Count > 0)
+                return NotFound(setor);
+
+            return Ok(setor);
         }
 
         [HttpPost]
-        public async Task<IActionResult> InserirSetor(SetorRequest setor)
+        public async Task<IActionResult> PostAsync([FromBody] SetorRequest setor)
         {
-            return Ok(await _setorService.InserirSetor(setor));
+            if (!ModelState.IsValid)
+                return BadRequest(new ResponseBase<Setor>(ModelState.GetErrors()));
+
+            var novoSetor = await _setorService.InserirSetor(setor);
+
+            if (novoSetor.Errors.Count > 0)
+                return StatusCode(500, novoSetor);
+
+            return Created($"api/Setor/{novoSetor.Data.Id}", novoSetor);
         }
 
-        [HttpPost("atualizar/{setorId}")]
-        public async Task<IActionResult> AtualizarSetor(long setorId, SetorRequest setor)
+        [HttpPost("atualizar/{id}")]
+        public async Task<IActionResult> PutAsync([FromRoute] long id, [FromBody] SetorRequest setor)
         {
-            return Ok(await _setorService.AtualizarSetor(setorId, setor));
+            if (!ModelState.IsValid)
+                return BadRequest(new ResponseBase<Setor>(ModelState.GetErrors()));
+
+            var setorAtualizado = await _setorService.AtualizarSetor(id, setor);
+
+            if (setorAtualizado.Errors.Count > 0)
+                return StatusCode(500, setorAtualizado);
+
+            return Ok(setorAtualizado);
         }
 
-        [HttpPost("excluir/{setorId}")]
-        public async Task<IActionResult> ExcluirSetor(long setorId)
+        [HttpPost("excluir/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] long id)
         {
-            return Ok(await _setorService.ExcluirSetor(setorId));
+            var setor = await _setorService.ExcluirSetor(id);
+
+            if (setor.Errors.Count > 0)
+                return StatusCode(500, setor);
+
+            return Ok(setor);
         }
     }
 }
