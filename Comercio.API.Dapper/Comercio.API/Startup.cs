@@ -32,7 +32,13 @@ namespace Comercio.API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services
+            .AddControllers()
+            .ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Comercio.API", Version = "v1" });
