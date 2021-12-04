@@ -1,6 +1,4 @@
 ﻿using Comercio.Domain.Entities;
-using Dapper;
-using System.Data;
 
 namespace Comercio.Data.Queries
 {
