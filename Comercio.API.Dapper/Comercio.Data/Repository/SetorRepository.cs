@@ -82,15 +82,15 @@ namespace Comercio.Data.Repository
             }            
         }
 
-        public async Task<bool> ExcluirSetor(long setorId)
+        public async Task<bool> ExcluirSetor(long id)
         {
             try
             {
                 using var connection = await _connection.GetConnectionAsync();
-                var setorExiste = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = setorId }) != null;
+                var setorExiste = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = id }) != null;
                 if (!setorExiste)
                     throw new Exception("Setor não encontrado no sistema");
-                return await connection.QueryAsync<Setor>(SetorQuery.DELETE_SETOR, new { Id = setorId }) != null;
+                return await connection.QueryAsync<Setor>(SetorQuery.DELETE_SETOR, new { Id = id }) != null;
             }
             catch (System.Exception)
             {
