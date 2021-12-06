@@ -1,9 +1,10 @@
-﻿using Comercio.Domain.Entities;
+﻿using Comercio.Domain.Base;
+using Comercio.Domain.Entities;
 using Comercio.Domain.Interfaces;
 using Comercio.Services.Interfaces;
 using Comercio.Services.Request;
-using Comercio.Services.Response;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Comercio.Services.Services
@@ -17,45 +18,34 @@ namespace Comercio.Services.Services
             _repository = repository;
         }
 
-        public async Task<ListaProdutoResponse> ObterProdutos()
+        public async Task<ResponseBase<List<Produto>>> ObterProdutos()
         {
-            var ret = new ListaProdutoResponse();
             try
             {
-                ret.Produtos = await _repository.ListarProdutos();
-                ret.Sucesso = true;
-                ret.Mensagem = "Sucesso";
-                return ret;
+                var produtos = await _repository.ListarProdutos();
+                return new ResponseBase<List<Produto>>(produtos);
             }
             catch (Exception erro)
             {
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<List<Produto>>(erro.Message);
             }
         }
 
-        public async Task<ProdutoResponse> ObterPorId(long id)
+        public async Task<ResponseBase<Produto>> ObterPorId(long id)
         {
-            var ret = new ProdutoResponse();
             try
             {
-                ret.Produto = await _repository.ObterPorId(id);
-                ret.Sucesso = true;
-                ret.Mensagem = "Sucesso";
-                return ret;
+                var produto = await _repository.ObterPorId(id);
+                return new ResponseBase<Produto>(produto);
             }
             catch (Exception erro)
             {
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<Produto>(erro.Message);
             }
         }
 
-        public async Task<ProdutoResponse> InserirProduto(ProdutoRequest produto)
+        public async Task<ResponseBase<Produto>> InserirProduto(ProdutoRequest produto)
         {
-            var ret = new ProdutoResponse();
             try
             {
                 var novoProduto = new Produto()
@@ -67,27 +57,21 @@ namespace Comercio.Services.Services
                     Setor_id = produto.Setor_id
                 };
                 novoProduto = await _repository.InserirProduto(novoProduto);
-                ret.Produto = novoProduto;
-                ret.Sucesso = true;
-                ret.Mensagem = "Produto inserido com sucesso";
-                return ret;
+                return new ResponseBase<Produto>(novoProduto);
             }
             catch (Exception erro)
             {
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<Produto>(erro.Message);
             }
         }
 
-        public async Task<ProdutoResponse> AtualizarProduto(long produtoId, ProdutoRequest produto)
+        public async Task<ResponseBase<Produto>> AtualizarProduto(long id, ProdutoRequest produto)
         {
-            var ret = new ProdutoResponse();
             try
             {
                 var produtoAtualizado = new Produto()
                 {
-                    Id = produtoId,
+                    Id = id,
                     Codigo = produto.Codigo,
                     Descricao = produto.Descricao,
                     Preco_custo = produto.Preco_custo,
@@ -95,44 +79,24 @@ namespace Comercio.Services.Services
                     Setor_id = produto.Setor_id
                 };
                 produtoAtualizado = await _repository.AtualizarProduto(produtoAtualizado);
-                ret.Produto = produtoAtualizado;
-                ret.Sucesso = true;
-                ret.Mensagem = "Produto atualizado com sucesso";
-                return ret;
+                return new ResponseBase<Produto>(produtoAtualizado);
             }
             catch (Exception erro)
             {
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<Produto>(erro.Message);
             }
         }
 
-        public async Task<ProdutoResponse> ExcluirProduto(long produtoId)
+        public async Task<ResponseBase<bool>> ExcluirProduto(long id)
         {
-            var ret = new ProdutoResponse();
             try
             {
-                if(await _repository.ExcluirProduto(produtoId))
-                {
-                    ret.Produto = null;
-                    ret.Sucesso = true;
-                    ret.Mensagem = "Produto excluído com sucesso";
-                }
-                else
-                {
-                    ret.Produto = null;
-                    ret.Sucesso = false;
-                    ret.Mensagem = "Não foi possível excluir o produto";
-                }
-                return ret;
+                var sucesso = await _repository.ExcluirProduto(id);
+                return new ResponseBase<bool>(sucesso);
             }
             catch (Exception erro)
             {
-                ret.Produto = null;
-                ret.Sucesso = false;
-                ret.Mensagem = erro.Message;
-                return ret;
+                return new ResponseBase<bool>(erro.Message);
             }
         }
     }
