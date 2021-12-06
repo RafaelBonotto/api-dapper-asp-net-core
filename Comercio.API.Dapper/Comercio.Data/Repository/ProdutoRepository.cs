@@ -20,18 +20,18 @@ namespace Comercio.Data.Repository
         }
 
         public async Task<List<Produto>> ListarProdutos()
-        {
-            List<Produto> produtos;
+        {            
             try
             {
-                using (var connection = await _connection.GetConnectionAsync())
-                {
-                    produtos = connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
-                    foreach (var produto in produtos)
-                    {
-                        produto.Tb_Setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = produto.Setor_id });
-                    }
-                }
+                using var connection = await _connection.GetConnectionAsync();
+                List<Produto> produtos = connection.Query<Produto>(ProdutoQuery.SELECT_PRODUTOS).ToList();
+
+                if (produtos == null)
+                    throw new Exception("Não foi encontrado nenhum produto no sistema");
+                      
+                foreach (var produto in produtos)
+                    produto.Tb_Setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = produto.Setor_id });
+                
                 return produtos;
             }
             catch (System.Exception)
@@ -42,13 +42,12 @@ namespace Comercio.Data.Repository
 
         public async Task<Produto> ObterPorId(long id)
         {
-            Produto produto;
+            using var connection = await _connection.GetConnectionAsync();
+            Produto produto = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_ID, new { Id = id });
+            if (produto == null)
+                throw new Exception("Não foi encontrado nenhum produto no sistema");
 
-            using (var connection = await _connection.GetConnectionAsync())
-            {
-                produto = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_ID, new { Id = id });
-                produto.Tb_Setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = produto.Setor_id });
-            }
+            produto.Tb_Setor = await connection.QueryFirstOrDefaultAsync<Setor>(SetorQuery.SELECT_SETOR_POR_ID, new { Id = produto.Setor_id });
             return produto;
         }
 
@@ -56,19 +55,17 @@ namespace Comercio.Data.Repository
         {            
             try
             {
-                using (var connection = await _connection.GetConnectionAsync())
-                {
-                    var checkCodigo = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_CODIGO, new { Codigo = produto.Codigo });
-                    if(checkCodigo != null)
-                        throw new Exception("Não foi possível inserir o produto com esse código");
+                using var connection = await _connection.GetConnectionAsync();
+                var checkCodigo = await connection.QueryFirstOrDefaultAsync<Produto>(ProdutoQuery.SELECT_PRODUTO_POR_CODIGO, new { Codigo = produto.Codigo });
+                if (checkCodigo != null)
+                    throw new Exception("Não foi possível inserir o produto com esse código");
 
-                    var produtoId = await connection.ExecuteScalarAsync<long>(ProdutoQuery.RetornaQueryInsertProduto(produto));
-                    return await this.ObterPorId(produtoId);
-                }
+                var produtoId = await connection.ExecuteScalarAsync<long>(ProdutoQuery.RetornaQueryInsertProduto(produto));
+                return await this.ObterPorId(produtoId);
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
-                return null;
+                throw;
             }
         }
 
@@ -76,26 +73,22 @@ namespace Comercio.Data.Repository
         {
             try
             {
-                using (var connection = await _connection.GetConnectionAsync())
-                {
-                    await connection.QueryAsync(ProdutoQuery.RetornaQueryUpdateProduto(produto));
-                    return await this.ObterPorId(produto.Id);
-                }
+                using var connection = await _connection.GetConnectionAsync();
+                await connection.QueryAsync(ProdutoQuery.RetornaQueryUpdateProduto(produto));
+                return await this.ObterPorId(produto.Id);
             }
-            catch (System.Exception e)
+            catch (System.Exception)
             {
-                return null;
+                throw;
             }
         }
 
-        public async Task<bool> ExcluirProduto(long produtoId)
+        public async Task<bool> ExcluirProduto(long id)
         {
             try
             {
-                using (var connection = await _connection.GetConnectionAsync())
-                {
-                    return await connection.QueryAsync<Setor>(ProdutoQuery.DELETE_PRODUTO, new { Id = produtoId }) != null;
-                }
+                using var connection = await _connection.GetConnectionAsync();
+                return await connection.QueryAsync<Setor>(ProdutoQuery.DELETE_PRODUTO, new { Id = id }) != null;
             }
             catch (System.Exception)
             {
