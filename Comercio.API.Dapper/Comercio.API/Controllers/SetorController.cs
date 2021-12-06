@@ -55,7 +55,7 @@ namespace Comercio.API.Controllers
             return Created($"api/Setor/{novoSetor.Data.Id}", novoSetor);
         }
 
-        [HttpPost("atualizar/{id}")]
+        [HttpPut("atualizar/{id}")]
         public async Task<IActionResult> PutAsync([FromRoute] long id, [FromBody] SetorRequest setor)
         {
             if (!ModelState.IsValid)
@@ -69,7 +69,7 @@ namespace Comercio.API.Controllers
             return Ok(setorAtualizado);
         }
 
-        [HttpPost("excluir/{id}")]
+        [HttpDelete("excluir/{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] long id)
         {
             var setor = await _setorService.ExcluirSetor(id);
