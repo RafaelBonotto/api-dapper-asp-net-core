@@ -1,4 +1,6 @@
-﻿using Comercio.Domain.Entities;
+﻿using Comercio.Domain.Base;
+using Comercio.Domain.Entities;
+using Comercio.Domain.Extensions;
 using Comercio.Services.Interfaces;
 using Comercio.Services.Request;
 using Microsoft.AspNetCore.Mvc;
@@ -17,34 +19,65 @@ namespace Comercio.API.Controllers
             _produtoService = produtoService;
         }
 
-        [HttpGet("listar")]
-        public async Task<IActionResult> ListarProdutos()
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
         {
-            return Ok(await _produtoService.ObterProdutos());
+            var produto = await _produtoService.ObterProdutos();
+
+            if (produto.Errors.Count > 0)
+                return StatusCode(500, produto);
+
+            return Ok(produto);
         }
 
-        [HttpGet("id/{id}")]
-        public async Task<IActionResult> ObterProdutoPorId(long id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] long id)
         {
-            return Ok(await _produtoService.ObterPorId(id));
+            var produto = await _produtoService.ObterPorId(id);
+
+            if (produto.Errors.Count > 0)
+                return NotFound(produto);
+
+            return Ok(produto);
         }
 
         [HttpPost]
-        public async Task<IActionResult> InserirProduto(ProdutoRequest produto)
+        public async Task<IActionResult> PostAsync([FromBody] ProdutoRequest produto)
         {
-            return Ok(await _produtoService.InserirProduto(produto));
+            if (!ModelState.IsValid)
+                return BadRequest(new ResponseBase<Produto>(ModelState.GetErrors()));
+
+            var novoProduto = await _produtoService.InserirProduto(produto);
+
+            if (novoProduto.Errors.Count > 0)
+                return StatusCode(500, novoProduto);
+
+            return Created($"api/Produto/{novoProduto.Data.Id}", novoProduto);
         }
 
-        [HttpPost("atualizar/{produtoId}")]
-        public async Task<IActionResult> AtualizarProduto(long produtoId, ProdutoRequest produto)
+        [HttpPut("atualizar/{id}")]
+        public async Task<IActionResult> PutAsync([FromRoute] long id, [FromBody] ProdutoRequest produto)
         {
-            return Ok(await _produtoService.AtualizarProduto(produtoId, produto));
+            if (!ModelState.IsValid)
+                return BadRequest(new ResponseBase<Produto>(ModelState.GetErrors()));
+
+            var produtoAtualizado = await _produtoService.AtualizarProduto(id, produto);
+
+            if (produtoAtualizado.Errors.Count > 0)
+                return StatusCode(500, produtoAtualizado);
+
+            return Ok(produtoAtualizado);
         }
 
-        [HttpPost("excluir/{produtoId}")]
-        public async Task<IActionResult> ExcluirProduto(long produtoId)
+        [HttpDelete("excluir/{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] long id)
         {
-            return Ok(await _produtoService.ExcluirProduto(produtoId));
+            var produto = await _produtoService.ExcluirProduto(id);
+
+            if (produto.Errors.Count > 0)
+                return StatusCode(500, produto);
+
+            return Ok(produto);
         }
     }
 }
