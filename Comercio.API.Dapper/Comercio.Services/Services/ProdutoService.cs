@@ -99,5 +99,26 @@ namespace Comercio.Services.Services
                 return new ResponseBase<bool>(erro.Message);
             }
         }
+
+        public async Task<bool> TesteTransaction(ProdutoRequest produto)
+        {
+            try
+            {
+                var novoProduto = new Produto()
+                {
+                    Codigo = produto.Codigo,
+                    Descricao = produto.Descricao,
+                    Preco_custo = produto.Preco_custo,
+                    Preco_venda = produto.Preco_venda
+                };
+                var insert = await _repository.TesteTransactionCommitRollback(novoProduto);
+
+                return insert;
+            }
+            catch (Exception erro)
+            {
+                throw;
+            }
+        }
     }
 }
