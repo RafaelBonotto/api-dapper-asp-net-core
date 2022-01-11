@@ -13,5 +13,6 @@ namespace Comercio.Services.Interfaces
         Task<ResponseBase<Produto>> InserirProduto(ProdutoRequest produto);
         Task<ResponseBase<Produto>> AtualizarProduto(long id, ProdutoRequest produto);
         Task<ResponseBase<bool>> ExcluirProduto(long id);
+        Task<bool> TesteTransaction(ProdutoRequest produto);
     }
 }
