@@ -79,5 +79,11 @@ namespace Comercio.API.Controllers
 
             return Ok(produto);
         }
+
+        [HttpPost("testeTransaction")]
+        public async Task<IActionResult> TesteTransaction([FromBody] ProdutoRequest produto)
+        {
+            return Ok(await _produtoService.TesteTransaction(produto));
+        }
     }
 }
