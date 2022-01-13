@@ -11,5 +11,6 @@ namespace Comercio.Domain.Interfaces
         Task<Produto> InserirProduto(Produto produto);
         Task<Produto> AtualizarProduto(Produto produto);
         Task<bool> ExcluirProduto(long id);
+        Task<bool> TesteTransactionCommitRollback(Produto produto);
     }
 }
