@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Comercio.Data.Repository
 {
@@ -93,6 +94,38 @@ namespace Comercio.Data.Repository
             catch (System.Exception)
             {
                 throw;
+            }
+        }
+
+        public async Task<bool> TesteTransactionCommitRollback(Produto produto)
+        {
+
+            var insertProduto = @$"INSERT INTO comercioDB.tb_produto 
+                        (codigo, descricao, preco_custo, preco_venda, data_fabricacao, data_validade, ativo, data_criacao, data_alteracao)
+                        VALUES ('{produto.Codigo}', '{produto.Descricao}', {produto.Preco_custo}, {produto.Preco_venda}, now(), now(), 1, now(), now());";
+                        
+            var insertSetor = @"UPDATE comercioDB.tb_produto SET setor_id = 20;";
+
+            using (var connection = await _connection.GetConnectionAsync())
+            {
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        connection.Execute(insertProduto, transaction: transaction);   
+                        connection.Execute(insertSetor, transaction: transaction);   
+                        //await connection.QueryAsync(insertProduto);
+                        //await connection.QueryAsync(insertSetor);
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception erro)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
+                }              
             }
         }
     }
